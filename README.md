@@ -94,28 +94,6 @@ Or set up automated deployment with GitHub Actions (workflow included in `.githu
 - **Building Data**: [OpenStreetMap](https://www.openstreetmap.org) contributors
 - **Base Map**: OpenStreetMap
 
-## 🎓 Use Case
-
-This application was developed as a portfolio project to demonstrate skills relevant to flood risk management positions, specifically:
-- GIS data integration and visualization
-- Hydraulic modeling result display (WMS layers)
-- Spatial data analysis
-- Risk assessment and reporting
-- Modern web development practices
-
-Perfect for demonstrating technical capabilities for positions in:
-- Hochwasserrisikomanagement (Flood Risk Management)
-- Environmental planning and analysis
-- GIS and spatial data science
-
-## 🔍 Technical Highlights
-
-- **Efficient Data Processing**: Batched WMS queries with rate limiting to respect server resources
-- **Robust Error Handling**: Fallback mechanisms for different WMS response formats
-- **Responsive Design**: Works on desktop and tablet devices
-- **Progress Tracking**: Real-time progress updates during analysis
-- **Performance Optimization**: Handles analysis of 1000+ buildings with user confirmation for large areas
-
 ## 📝 Future Enhancements
 
 Potential improvements for consideration:
@@ -124,19 +102,10 @@ Potential improvements for consideration:
 - Historical flood event markers
 - Damage cost estimation models
 - Support for custom flood scenarios
-- Multi-language support (German/English toggle)
-
-## 🤝 Contributing
-
-This is a portfolio project, but suggestions and feedback are welcome! Feel free to open issues or submit pull requests.
 
 ## 📄 License
 
-MIT License - feel free to use this project for your own portfolio or learning purposes.
-
-## 👤 Author
-
-Developed as a demonstration of GIS and flood risk management capabilities for job applications in the environmental sector.
+MIT License - feel free to use this project for learning purposes.
 
 ---
 
