@@ -54,7 +54,7 @@ function App() {
       
       <footer className="app-footer">
         <p>
-          Flood data: <a href="https://maps.brandenburg.de" target="_blank" rel="noopener noreferrer">
+          Flood data: <a href="https://lfu.brandenburg.de/lfu/de/aufgaben/wasser/hochwasserschutz/hochwasserrisikomanagement/hochwasser-gefahren-und-risikokarten/" target="_blank" rel="noopener noreferrer">
             Brandenburg Landesamt für Umwelt (LfU)
           </a> | Building data: <a href="https://www.openstreetmap.org" target="_blank" rel="noopener noreferrer">
             OpenStreetMap
