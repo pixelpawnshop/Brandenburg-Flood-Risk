@@ -44,7 +44,8 @@ function FloodMap({ onAnalysisStart, onAnalysisComplete, onAnalysisError, onProg
         format: 'image/png',
         transparent: true,
         opacity: 0.6,
-        attribution: 'Brandenburg LfU'
+        attribution: 'Brandenburg LfU',
+        className: 'flood-layer-extreme'
       })
       
       const highLayer = L.tileLayer.wms(WMS_BASE_URL, {
@@ -52,7 +53,8 @@ function FloodMap({ onAnalysisStart, onAnalysisComplete, onAnalysisError, onProg
         format: 'image/png',
         transparent: true,
         opacity: 0.5,
-        attribution: 'Brandenburg LfU'
+        attribution: 'Brandenburg LfU',
+        className: 'flood-layer-high'
       })
       
       const mediumLayer = L.tileLayer.wms(WMS_BASE_URL, {
@@ -60,7 +62,8 @@ function FloodMap({ onAnalysisStart, onAnalysisComplete, onAnalysisError, onProg
         format: 'image/png',
         transparent: true,
         opacity: 0.4,
-        attribution: 'Brandenburg LfU'
+        attribution: 'Brandenburg LfU',
+        className: 'flood-layer-medium'
       })
       
       // Add layers to map
@@ -253,7 +256,7 @@ function FloodMap({ onAnalysisStart, onAnalysisComplete, onAnalysisError, onProg
               onChange={() => toggleFloodLayer('extreme')}
             />
             <span className="layer-indicator extreme"></span>
-            HQ-extrem (High probability)
+            HQ-extrem
           </label>
           <label>
             <input
@@ -262,7 +265,7 @@ function FloodMap({ onAnalysisStart, onAnalysisComplete, onAnalysisError, onProg
               onChange={() => toggleFloodLayer('high')}
             />
             <span className="layer-indicator high"></span>
-            HQ-hoch (Medium-high)
+            HQ-hoch
           </label>
           <label>
             <input
@@ -271,7 +274,7 @@ function FloodMap({ onAnalysisStart, onAnalysisComplete, onAnalysisError, onProg
               onChange={() => toggleFloodLayer('medium')}
             />
             <span className="layer-indicator medium"></span>
-            HQ-mittel (Medium probability)
+            HQ-mittel
           </label>
         </div>
         

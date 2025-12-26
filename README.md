@@ -20,7 +20,7 @@ A web application for analyzing building exposure to flood risk scenarios in Bra
 
 ## 🚀 Live Demo
 
-[View Live Application](https://yourusername.github.io/port/) *(Update with your actual GitHub Pages URL)*
+[View Live Application](https://pixelpawnshop.github.io/Brandenburg-Flood-Risk/)
 
 ## 🛠️ Technology Stack
 
@@ -35,8 +35,8 @@ A web application for analyzing building exposure to flood risk scenarios in Bra
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/port.git
-cd port
+git clone https://github.com/pixelpawnshop/Brandenburg-Flood-Risk.git
+cd Brandenburg-Flood-Risk
 ```
 
 2. Install dependencies:
