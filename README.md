@@ -90,7 +90,7 @@ Or set up automated deployment with GitHub Actions (workflow included in `.githu
 
 ## 🗺️ Data Sources & Attribution
 
-- **Flood Hazard Maps**: [Brandenburg Landesamt für Umwelt (LfU)](https://maps.brandenburg.de)
+- **Flood Hazard Maps**: [Brandenburg Landesamt für Umwelt (LfU)]([https://maps.brandenburg.de](https://lfu.brandenburg.de/lfu/de/aufgaben/wasser/hochwasserschutz/hochwasserrisikomanagement/hochwasser-gefahren-und-risikokarten/))
 - **Building Data**: [OpenStreetMap](https://www.openstreetmap.org) contributors
 - **Base Map**: OpenStreetMap
 
