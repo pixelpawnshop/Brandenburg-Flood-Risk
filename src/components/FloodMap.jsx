@@ -6,6 +6,7 @@ import 'leaflet-draw'
 import 'leaflet-geometryutil'
 import { fetchBuildingsInPolygon, processBuildings, categorizeBuildingType } from '../services/overpassService'
 import { analyzeBuildingsFloodRisk, generateFloodStatistics, WMS_BASE_URL, FLOOD_LAYERS } from '../services/floodAnalysisService'
+import { calculateCensusPopulation, calculateFloodAffectedPopulation, calculatePopulationDensity } from '../services/censusPopulationService'
 import './FloodMap.css'
 
 // Fix for default marker icons in Leaflet with Webpack/Vite
@@ -156,30 +157,62 @@ function FloodMap({ onAnalysisStart, onAnalysisComplete, onAnalysisError, onProg
             onProgress
           )
           
+          // Calculate census-based population
+          onProgress({
+            current: analyzedBuildings.length,
+            total: analyzedBuildings.length,
+            message: 'Calculating population from census data...'
+          })
+          
+          let censusPopulation = null
+          let populationStats = null
+          
+          try {
+            censusPopulation = await calculateCensusPopulation(latlngs)
+            populationStats = calculateFloodAffectedPopulation(analyzedBuildings, censusPopulation)
+          } catch (error) {
+            console.warn('Could not load census data:', error)
+            // Continue without population data
+          }
+          
           // Generate statistics
           const stats = generateFloodStatistics(analyzedBuildings)
           
           // Calculate area
           const areaInKm2 = L.GeometryUtil.geodesicArea(layer.getLatLngs()[0]) / 1e6
           
+          // Calculate population density if census data available
+          const populationDensity = populationStats ? 
+            calculatePopulationDensity(populationStats.total, areaInKm2) : null
+          
           // Prepare results
           const results = {
             buildings: analyzedBuildings,
             statistics: stats,
+            population: populationStats,
             area: areaInKm2,
+            populationDensity: populationDensity,
             polygon: latlngs
           }
           
           // Update popup on polygon
-          layer.bindPopup(`
+          let popupContent = `
             <strong>Analysis Complete</strong><br>
             Total Buildings: ${stats.total.toLocaleString()}<br>
             Affected by Flooding: ${stats.affected.any.toLocaleString()}<br>
             - HQ-extrem: ${stats.affected.extreme.toLocaleString()}<br>
             - HQ-hoch: ${stats.affected.high.toLocaleString()}<br>
             - HQ-mittel: ${stats.affected.medium.toLocaleString()}<br>
-            Area: ${areaInKm2.toFixed(2)} km²
-          `).openPopup()
+            Area: ${areaInKm2.toFixed(2)} km²`
+          
+          if (populationStats) {
+            popupContent += `<br><br><strong>Census Population:</strong><br>
+            Total: ${populationStats.total.toLocaleString()} residents<br>
+            At Risk: ${populationStats.affected.any.toLocaleString()} residents<br>
+            Density: ${populationDensity.toLocaleString()} residents/km²`
+          }
+          
+          layer.bindPopup(popupContent).openPopup()
           
           onAnalysisComplete(results)
           

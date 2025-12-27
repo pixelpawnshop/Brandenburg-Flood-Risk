@@ -50,6 +50,9 @@ function AnalysisResults({ results }) {
   }
   
   const affectedPercentage = ((statistics.affected.any / statistics.total) * 100).toFixed(1)
+  const { population, populationDensity } = results
+  const populationAtRiskPercentage = population ? 
+    ((population.affected.any / population.total) * 100).toFixed(1) : 0
   
   return (
     <div className="analysis-results">
@@ -98,12 +101,57 @@ function AnalysisResults({ results }) {
             <div className="stat-label">Buildings at Risk ({affectedPercentage}%)</div>
           </div>
           
+          {population && (
+            <>
+              <div className="stat-card census">
+                <div className="stat-value">{population.total.toLocaleString()}</div>
+                <div className="stat-label">Census Population</div>
+              </div>
+              
+              <div className="stat-card census-risk">
+                <div className="stat-value">{population.affected.any.toLocaleString()}</div>
+                <div className="stat-label">Residents at Risk ({populationAtRiskPercentage}%)</div>
+              </div>
+              
+              {populationDensity && (
+                <div className="stat-card density">
+                  <div className="stat-value">{populationDensity.toLocaleString()}</div>
+                  <div className="stat-label">Population Density (per km²)</div>
+                </div>
+              )}
+              
+              {population.communes && population.communes.length > 0 && (
+                <div className="communes-info">
+                  <h3>Affected Communes ({population.communes.length})</h3>
+                  <div className="communes-list">
+                    {population.communes.slice(0, 5).map((commune, index) => (
+                      <div key={index} className="commune-item">
+                        <span className="commune-name">{commune.name}</span>
+                        <span className="commune-pop">
+                          {commune.estimatedInArea.toLocaleString()} residents
+                        </span>
+                      </div>
+                    ))}
+                    {population.communes.length > 5 && (
+                      <p className="commune-note">
+                        +{population.communes.length - 5} more communes
+                      </p>
+                    )}
+                  </div>
+                </div>
+              )}
+            </>
+          )}
+          
           <div className="flood-scenarios">
             <h3>Flood Scenarios</h3>
             <div className="scenario-item extreme">
               <div className="scenario-header">
                 <span className="scenario-label">HQ-extrem</span>
-                <span className="scenario-value">{statistics.affected.extreme.toLocaleString()}</span>
+                <span className="scenario-value">
+                  {statistics.affected.extreme.toLocaleString()} buildings
+                  {population && ` | ${population.affected.extreme.toLocaleString()} residents`}
+                </span>
               </div>
               <div className="scenario-bar">
                 <div 
@@ -116,7 +164,10 @@ function AnalysisResults({ results }) {
             <div className="scenario-item high">
               <div className="scenario-header">
                 <span className="scenario-label">HQ-hoch</span>
-                <span className="scenario-value">{statistics.affected.high.toLocaleString()}</span>
+                <span className="scenario-value">
+                  {statistics.affected.high.toLocaleString()} buildings
+                  {population && ` | ${population.affected.high.toLocaleString()} residents`}
+                </span>
               </div>
               <div className="scenario-bar">
                 <div 
@@ -129,7 +180,10 @@ function AnalysisResults({ results }) {
             <div className="scenario-item medium">
               <div className="scenario-header">
                 <span className="scenario-label">HQ-mittel</span>
-                <span className="scenario-value">{statistics.affected.medium.toLocaleString()}</span>
+                <span className="scenario-value">
+                  {statistics.affected.medium.toLocaleString()} buildings
+                  {population && ` | ${population.affected.medium.toLocaleString()} residents`}
+                </span>
               </div>
               <div className="scenario-bar">
                 <div 

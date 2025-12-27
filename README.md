@@ -11,9 +11,16 @@ A web application for analyzing building exposure to flood risk scenarios in Bra
   - HQ-mittel (Medium probability)
 - **Building Analysis**: Automatically fetches all buildings within selected areas from OpenStreetMap
 - **Risk Assessment**: Determines which buildings are affected by each flood scenario
+- **Census Population Integration**: Calculates actual population in analysis areas using official 2022 German census data
+  - Accurate population counts by commune intersection
+  - Population at risk estimation based on affected buildings
+  - Population density calculation per km²
+  - List of affected communes with population breakdown
 - **Detailed Statistics**: 
   - Total buildings analyzed
   - Buildings at risk by scenario
+  - Census population in analysis area
+  - Estimated residents at risk
   - Breakdown by building category (Residential, Commercial, Industrial, etc.)
   - Breakdown by specific building types
 - **Data Export**: Export complete analysis results to CSV format
@@ -29,6 +36,7 @@ A web application for analyzing building exposure to flood risk scenarios in Bra
 - **Data Sources**:
   - Brandenburg LfU WMS Service for flood hazard maps
   - Overpass API for OpenStreetMap building data
+  - German Census 2022 data (Zensus 2022) for accurate population statistics
 - **Deployment**: GitHub Pages with automated GitHub Actions workflow
 
 ## 📦 Installation
@@ -79,25 +87,39 @@ Or set up automated deployment with GitHub Actions (workflow included in `.githu
 
 ## 📊 How It Works
 
-1. **Draw Analysis Area**: Use the polygon or rectangle tools to select an area on the map
-2. **Fetch Buildings**: The app queries OpenStreetMap's Overpass API to get all buildings in the selected area
-3. **Flood Risk Analysis**: For each building centroid, the app queries the Brandenburg WMS service to determine if it falls within any flood hazard zones
-4. **View Results**: Detailed statistics are displayed showing:
-   - Total buildings and affected buildings
-   - Breakdown by flood scenario
+1. **Draw Analysis Area**: The app uses canvas-based pixel analysis to check if buildings intersect with flood hazard zones from the Brandenburg WMS service
+4. **Census Population Calculation**: 
+   - Population counts from 2022 German census data are aggregated for intersecting communes
+   - Population at risk is estimated based on the proportion of buildings affected by flooding
+5. **View Results**: Comprehensive statistics are displayed showing:
+   - Total buildings and affected buildings by scenario
+   - Census population in the analysis area
+   - Estimated residents at risk with percentage
+   - Population density (residents/km²)
+   - List of affected communes with individual population counts - Official flood risk and hazard maps (Hochwassergefahren- und Hochwasserrisikokarten)
+- **Building Data**: [OpenStreetMap](https://www.openstreetmap.org) contributors via Overpass API
+- **Population Data**: [Zensus 2022](https://ergebnisse.zensus2022.de/datenbank/online/statistic/1000A/table/1000A-0000) - German Federal Census 2022 (Statistisches Bundesamt)
+  - Census data provides actual population counts per commune (Gemeinde) in Brandenburg
+  - Data includes AGS (Amtlicher Gemeindeschlüssel) codes for precise administrative matching
+  - Spatial boundaries in EPSG:3857 projection for accurate geometric intersection
+   - Categorization by building type
+6  - Breakdown by flood scenario
    - Categorization by building type
 5. **Export Data**: Download complete results as CSV for further analysis
 
 ## 🗺️ Data Sources & Attribution
 
-- **Flood Hazard Maps**: [Brandenburg Landesamt für Umwelt (LfU)](https://lfu.brandenburg.de/lfu/de/aufgaben/wasser/hochwasserschutz/hochwasserrisikomanagement/hochwasser-gefahren-und-risikokarten/)
-- **Building Data**: [OpenStreetMap](https://www.openstreetmap.org) contributors
-- **Base Map**: OpenStreetMap
+
 
 ## 📝 Future Enhancements
 
 Potential improvements for consideration:
-- Integration of additional infrastructure layers (Deiche/levees)
+- Integration of additional infrastructure layers (Deiche/levees, critical facilities)
+- More precise population distribution using building-level occupancy estimates
+- Historical flood event markers with observed water levels
+- Damage cost estimation models based on building types and flood depths
+- Support for custom flood scenarios and return periods
+- Temporal analysis showing population change over census periodructure layers (Deiche/levees)
 - Population density overlay for impact estimation
 - Historical flood event markers
 - Damage cost estimation models
