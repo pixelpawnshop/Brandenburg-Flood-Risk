@@ -103,7 +103,7 @@ Or set up automated deployment with GitHub Actions (workflow included in `.githu
   - Data includes AGS (Amtlicher Gemeindeschlüssel) codes for precise administrative matching
   - Spatial boundaries in EPSG:3857 projection for accurate geometric intersection
    - Categorization by building type
-6  - Breakdown by flood scenario
+6. - Breakdown by flood scenario
    - Categorization by building type
 5. **Export Data**: Download complete results as CSV for further analysis
 
