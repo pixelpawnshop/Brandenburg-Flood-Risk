@@ -58,6 +58,8 @@ function App() {
             Brandenburg Landesamt für Umwelt (LfU)
           </a> | Building data: <a href="https://www.openstreetmap.org" target="_blank" rel="noopener noreferrer">
             OpenStreetMap
+          </a> | Census data: <a href="https://ergebnisse.zensus2022.de/datenbank/online/statistic/1000A/table/1000A-0000" target="_blank" rel="noopener noreferrer">
+            Zensus 2022
           </a>
         </p>
       </footer>
