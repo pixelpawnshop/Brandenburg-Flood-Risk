@@ -82,34 +82,7 @@ base: '/your-repo-name/',
 ```bash
 npm run deploy
 ```
-
 Or set up automated deployment with GitHub Actions (workflow included in `.github/workflows/deploy.yml`)
-
-## 📊 How It Works
-
-1. **Draw Analysis Area**: The app uses canvas-based pixel analysis to check if buildings intersect with flood hazard zones from the Brandenburg WMS service
-4. **Census Population Calculation**: 
-   - Population counts from 2022 German census data are aggregated for intersecting communes
-   - Population at risk is estimated based on the proportion of buildings affected by flooding
-5. **View Results**: Comprehensive statistics are displayed showing:
-   - Total buildings and affected buildings by scenario
-   - Census population in the analysis area
-   - Estimated residents at risk with percentage
-   - Population density (residents/km²)
-   - List of affected communes with individual population counts - Official flood risk and hazard maps (Hochwassergefahren- und Hochwasserrisikokarten)
-- **Building Data**: [OpenStreetMap](https://www.openstreetmap.org) contributors via Overpass API
-- **Population Data**: [Zensus 2022](https://ergebnisse.zensus2022.de/datenbank/online/statistic/1000A/table/1000A-0000) - German Federal Census 2022 (Statistisches Bundesamt)
-  - Census data provides actual population counts per commune (Gemeinde) in Brandenburg
-  - Data includes AGS (Amtlicher Gemeindeschlüssel) codes for precise administrative matching
-  - Spatial boundaries in EPSG:3857 projection for accurate geometric intersection
-   - Categorization by building type
-6. - Breakdown by flood scenario
-   - Categorization by building type
-5. **Export Data**: Download complete results as CSV for further analysis
-
-## 🗺️ Data Sources & Attribution
-
-
 
 ## 📝 Future Enhancements
 
