@@ -11,6 +11,7 @@ A web application for analyzing building exposure to flood risk scenarios in Bra
   - HQ-mittel (Medium probability)
 - **Building Analysis**: Automatically fetches all buildings within selected areas from OpenStreetMap
 - **Risk Assessment**: Determines which buildings are affected by each flood scenario
+- **Land Cover Analysis**: Integrates Brandenburg BTLN (Biotop- und Landnutzungskartierung) data to assess flood impact on different land use types (forests, grassland, wetlands, etc.)
 - **Census Population Integration**: Calculates actual population in analysis areas using official 2022 German census data
   - Accurate population counts by commune intersection
   - Population at risk estimation based on affected buildings
