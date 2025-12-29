@@ -229,4 +229,4 @@ export function generateFloodStatistics(analyzedBuildings) {
   return stats;
 }
 
-export { FLOOD_LAYERS, WMS_BASE_URL };
+export { FLOOD_LAYERS, WMS_BASE_URL, loadFloodLayerImage, isPointFlooded };

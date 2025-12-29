@@ -49,28 +49,15 @@
 }
 
 .layer-indicator.extreme {
-  background: rgba(220, 38, 38, 0.7);
+  background: rgba(42, 224, 241, 0.418);
 }
 
 .layer-indicator.high {
-  background: rgba(249, 115, 22, 0.7);
+  background: rgba(7, 80, 158, 0.618);
 }
 
 .layer-indicator.medium {
-  background: rgba(234, 179, 8, 0.7);
-}
-
-/* Apply color filters to WMS layers */
-.flood-layer-extreme {
-  filter: hue-rotate(-245deg) saturate(20) brightness(1.3);
-}
-
-.flood-layer-high {
-  filter: hue-rotate(-235deg) saturate(15) brightness(1.2);
-}
-
-.flood-layer-medium {
-  filter: hue-rotate(-200deg) saturate(10) brightness(1.1);
+  background: rgba(33, 178, 191, 0.418);
 }
 
 .clear-button {

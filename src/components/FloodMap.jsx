@@ -7,6 +7,7 @@ import 'leaflet-geometryutil'
 import { fetchBuildingsInPolygon, processBuildings, categorizeBuildingType } from '../services/overpassService'
 import { analyzeBuildingsFloodRisk, generateFloodStatistics, WMS_BASE_URL, FLOOD_LAYERS } from '../services/floodAnalysisService'
 import { calculateCensusPopulation, calculateFloodAffectedPopulation, calculatePopulationDensity } from '../services/censusPopulationService'
+import { fetchLandCoverData, calculateLandCoverStatistics } from '../services/landCoverService'
 import './FloodMap.css'
 
 // Fix for default marker icons in Leaflet with Webpack/Vite
@@ -24,8 +25,8 @@ function FloodMap({ onAnalysisStart, onAnalysisComplete, onAnalysisError, onProg
   const floodLayersRef = useRef({})
   const [activeFloodLayers, setActiveFloodLayers] = useState({
     extreme: true,
-    high: true,
-    medium: true
+    high: false,
+    medium: false
   })
 
   useEffect(() => {
@@ -175,6 +176,24 @@ function FloodMap({ onAnalysisStart, onAnalysisComplete, onAnalysisError, onProg
             // Continue without population data
           }
           
+          // Fetch and analyze land cover data
+          onProgress({
+            current: analyzedBuildings.length,
+            total: analyzedBuildings.length,
+            message: 'Analyzing land cover data...'
+          })
+          
+          let landCoverStats = null
+          
+          try {
+            const landCoverData = await fetchLandCoverData(latlngs)
+            const mapBounds = map.getBounds()
+            landCoverStats = await calculateLandCoverStatistics(landCoverData, latlngs, mapBounds)
+          } catch (error) {
+            console.warn('Could not load land cover data:', error)
+            // Continue without land cover data
+          }
+          
           // Generate statistics
           const stats = generateFloodStatistics(analyzedBuildings)
           
@@ -190,6 +209,7 @@ function FloodMap({ onAnalysisStart, onAnalysisComplete, onAnalysisError, onProg
             buildings: analyzedBuildings,
             statistics: stats,
             population: populationStats,
+            landCover: landCoverStats,
             area: areaInKm2,
             populationDensity: populationDensity,
             polygon: latlngs
@@ -262,10 +282,11 @@ function FloodMap({ onAnalysisStart, onAnalysisComplete, onAnalysisError, onProg
   }, [activeFloodLayers])
   
   const toggleFloodLayer = (layerName) => {
-    setActiveFloodLayers(prev => ({
-      ...prev,
-      [layerName]: !prev[layerName]
-    }))
+    setActiveFloodLayers({
+      extreme: layerName === 'extreme',
+      high: layerName === 'high',
+      medium: layerName === 'medium'
+    })
   }
   
   const clearDrawings = () => {
@@ -284,7 +305,8 @@ function FloodMap({ onAnalysisStart, onAnalysisComplete, onAnalysisError, onProg
           <h3>Flood Risk Layers</h3>
           <label>
             <input
-              type="checkbox"
+              type="radio"
+              name="floodLayer"
               checked={activeFloodLayers.extreme}
               onChange={() => toggleFloodLayer('extreme')}
             />
@@ -293,20 +315,22 @@ function FloodMap({ onAnalysisStart, onAnalysisComplete, onAnalysisError, onProg
           </label>
           <label>
             <input
-              type="checkbox"
-              checked={activeFloodLayers.high}
-              onChange={() => toggleFloodLayer('high')}
-            />
-            <span className="layer-indicator high"></span>
-            HQ-hoch
-          </label>
-          <label>
-            <input
-              type="checkbox"
+              type="radio"
+              name="floodLayer"
               checked={activeFloodLayers.medium}
               onChange={() => toggleFloodLayer('medium')}
             />
             <span className="layer-indicator medium"></span>
+            HQ-hoch
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="floodLayer"
+              checked={activeFloodLayers.high}
+              onChange={() => toggleFloodLayer('high')}
+            />
+            <span className="layer-indicator high"></span>
             HQ-mittel
           </label>
         </div>

@@ -82,6 +82,12 @@ function AnalysisResults({ results }) {
         >
           By Type
         </button>
+        <button 
+          className={activeTab === 'landcover' ? 'active' : ''}
+          onClick={() => setActiveTab('landcover')}
+        >
+          Land Cover
+        </button>
       </div>
       
       {activeTab === 'overview' && (
@@ -245,6 +251,78 @@ function AnalysisResults({ results }) {
           </div>
           {Object.keys(statistics.byType).length > 20 && (
             <p className="type-note">Showing top 20 types. Export CSV for complete data.</p>
+          )}
+        </div>
+      )}
+      
+      {activeTab === 'landcover' && (
+        <div className="tab-content">
+          {results.landCover ? (
+            <>
+              {results.landCover.message ? (
+                <div className="empty-state">
+                  <p>{results.landCover.message}</p>
+                  <p style={{ fontSize: '0.85rem', marginTop: '0.5rem', color: '#666' }}>
+                    Brandenburg Biotope data (BTLN) covers the entire state with detailed land use classifications.
+                  </p>
+                </div>
+              ) : (
+                <>
+                  <h3>Land Use by Category</h3>
+                  <div className="category-list">
+                    {Object.entries(results.landCover.byCategory)
+                      .sort((a, b) => b[1].count - a[1].count)
+                      .map(([key, data]) => (
+                        <div key={key} className="category-item">
+                          <div className="category-header">
+                            <span 
+                              className="category-color" 
+                              style={{ backgroundColor: data.color }}
+                            />
+                            <span className="category-name">{data.label}</span>
+                            <span className="category-count">{data.count.toLocaleString()}</span>
+                          </div>
+                          <div className="category-affected">
+                            At risk: {data.affected.toLocaleString()} ({data.count > 0 ? ((data.affected / data.count) * 100).toFixed(1) : 0}%)
+                          </div>
+                          <div className="category-bar">
+                            <div 
+                              className="category-bar-fill" 
+                              style={{ width: `${data.count > 0 ? (data.affected / data.count) * 100 : 0}%` }}
+                            ></div>
+                          </div>
+                        </div>
+                      ))}
+                  </div>
+                  
+                  <h3>Detailed Biotope Types</h3>
+                  <div className="type-list">
+                    {Object.entries(results.landCover.byType)
+                      .sort((a, b) => b[1].count - a[1].count)
+                      .slice(0, 20)
+                      .map(([type, data]) => (
+                        <div key={type} className="type-item">
+                          <div className="type-row">
+                            <span className="type-name">
+                              {type}
+                            </span>
+                            <span className="type-stats">
+                              {data.count} total, {data.affected} at risk
+                            </span>
+                          </div>
+                        </div>
+                      ))}
+                  </div>
+                  {Object.keys(results.landCover.byType).length > 20 && (
+                    <p className="type-note">Showing top 20 types. Export CSV for complete data.</p>
+                  )}
+                </>
+              )}
+            </>
+          ) : (
+            <div className="empty-state">
+              <p>No land cover data available for this area</p>
+            </div>
           )}
         </div>
       )}

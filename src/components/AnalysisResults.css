@@ -305,6 +305,101 @@
   font-size: 0.85rem;
 }
 
+.landcover-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.landcover-categories,
+.landcover-types {
+  margin-top: 1rem;
+}
+
+.category-item {
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  background: #f8f9fa;
+  border-radius: 6px;
+  border: 1px solid #e9ecef;
+}
+
+.category-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.category-color {
+  width: 20px;
+  height: 20px;
+  border-radius: 3px;
+  border: 1px solid #dee2e6;
+  flex-shrink: 0;
+}
+
+.category-name {
+  flex: 1;
+  font-weight: 500;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+.category-count {
+  color: #6c757d;
+  font-size: 0.9rem;
+}
+
+.category-affected {
+  margin-top: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  background: #fff3cd;
+  border-left: 3px solid #ff9800;
+  font-size: 0.85rem;
+  border-radius: 3px;
+}
+
+.type-info {
+  display: flex;
+  gap: 0.75rem;
+  flex: 1;
+  align-items: center;
+}
+
+.type-code {
+  font-family: 'Courier New', monospace;
+  color: #6c757d;
+  font-size: 0.85rem;
+  background: #f1f3f5;
+  padding: 0.1rem 0.4rem;
+  border-radius: 3px;
+  font-weight: 600;
+}
+
+.type-name {
+  font-size: 0.9rem;
+  color: #495057;
+  flex: 1;
+}
+
+.type-stats {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.type-count {
+  font-weight: 500;
+  color: #212529;
+}
+
+.type-affected {
+  color: #dc3545;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
 .type-note {
   margin-top: 1rem;
   font-size: 0.85rem;
