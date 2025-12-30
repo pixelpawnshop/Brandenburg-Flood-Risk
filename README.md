@@ -58,6 +58,11 @@ https://github.com/user-attachments/assets/6e390251-dad4-4ee9-abbd-20a8f0156b89
 - Land cover data: Brandenburg BTLN
 - Population data: German Census 2022 (Zensus 2022)
 
+## ⚠️ Performance Notes
+
+Flood exposure is evaluated using WMS GetFeatureInfo requests, which are designed for interactive map queries rather than large-scale batch analysis. 
+For large areas with many buildings, processing time may increase due to network latency and service-side rate limiting.
+
 ## 📦 Installation
 
 1. Clone the repository:
