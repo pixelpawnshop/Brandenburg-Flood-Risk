@@ -51,7 +51,7 @@ https://github.com/user-attachments/assets/6e390251-dad4-4ee9-abbd-20a8f0156b89
   - German Census 2022 data (Zensus 2022) for accurate population statistics
 - **Deployment**: GitHub Pages with automated GitHub Actions workflow
 
-- ## 📊 Data Sources & Attribution
+## 📊 Data Sources & Attribution
 
 - Flood hazard maps: Brandenburg Landesamt für Umwelt (LfU), provided via WMS services
 - Building data: © OpenStreetMap contributors (ODbL)
