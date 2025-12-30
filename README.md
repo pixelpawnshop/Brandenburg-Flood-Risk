@@ -6,9 +6,9 @@ A web application for analyzing building exposure to flood risk scenarios in Bra
 
 - **Interactive Map**: Draw polygons to select analysis areas anywhere in Brandenburg
 - **Official Flood Data**: Integrates WMS layers from Brandenburg LfU showing three flood scenarios:
-  - HQ-extrem 
-  - HQ-hoch 
-  - HQ-mittel
+  - HQ-extrem (extreme flood scenario)
+  - HQ-hoch (high flood scenario)
+  - HQ-mittel (medium flood scenario)
 - **Building Analysis**: Automatically fetches all buildings within selected areas from OpenStreetMap
 - **Risk Assessment**: Determines which buildings are affected by each flood scenario
 - **Land Cover Analysis**: Integrates Brandenburg BTLN (Biotop- und Landnutzungskartierung) data to assess flood impact on different land use types (forests, grassland, wetlands, etc.)
@@ -32,6 +32,15 @@ https://github.com/user-attachments/assets/6e390251-dad4-4ee9-abbd-20a8f0156b89
 
 [View Live Application](https://pixelpawnshop.github.io/Brandenburg-Flood-Risk/)
 
+## 🧠 Methodology – How the Analysis Works
+
+1. User draws a polygon defining the area of interest.
+2. All buildings within the polygon are retrieved via the OpenStreetMap Overpass API.
+3. Building centroids are calculated for spatial queries.
+4. For each building, flood exposure is determined by querying official LfU WMS layers (HQ-extrem, HQ-hoch, HQ-mittel).
+5. Results are aggregated by building type, land use (BTLN), and census population data.
+6. Summary statistics and affected features are visualized and exported as CSV.
+
 ## 🛠️ Technology Stack
 
 - **Frontend**: React 18 with Vite
@@ -41,6 +50,13 @@ https://github.com/user-attachments/assets/6e390251-dad4-4ee9-abbd-20a8f0156b89
   - Overpass API for OpenStreetMap building data
   - German Census 2022 data (Zensus 2022) for accurate population statistics
 - **Deployment**: GitHub Pages with automated GitHub Actions workflow
+
+- ## 📊 Data Sources & Attribution
+
+- Flood hazard maps: Brandenburg Landesamt für Umwelt (LfU), provided via WMS services
+- Building data: © OpenStreetMap contributors (ODbL)
+- Land cover data: Brandenburg BTLN
+- Population data: German Census 2022 (Zensus 2022)
 
 ## 📦 Installation
 
@@ -89,17 +105,11 @@ Or set up automated deployment with GitHub Actions (workflow included in `.githu
 
 ## 📝 Future Enhancements
 
-Potential improvements for consideration:
-- Integration of additional infrastructure layers (Deiche/levees, critical facilities)
+- Integration of flood protection infrastructure (e.g. dikes and levees)
 - More precise population distribution using building-level occupancy estimates
-- Historical flood event markers with observed water levels
-- Damage cost estimation models based on building types and flood depths
-- Support for custom flood scenarios and return periods
-- Temporal analysis showing population change over census periodructure layers (Deiche/levees)
-- Population density overlay for impact estimation
-- Historical flood event markers
-- Damage cost estimation models
-- Support for custom flood scenarios
+- Inclusion of historical flood events and observed water levels
+- Damage cost estimation models based on building types and flood depth
+- Support for additional or custom flood scenarios
 
 ## 📄 License
 
