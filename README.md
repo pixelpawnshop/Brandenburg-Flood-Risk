@@ -45,10 +45,6 @@ https://github.com/user-attachments/assets/6e390251-dad4-4ee9-abbd-20a8f0156b89
 
 - **Frontend**: React 18 with Vite
 - **Mapping**: Leaflet with Leaflet.draw for polygon drawing
-- **Data Sources**:
-  - Brandenburg LfU WMS Service for flood hazard maps
-  - Overpass API for OpenStreetMap building data
-  - German Census 2022 data (Zensus 2022) for accurate population statistics
 - **Deployment**: GitHub Pages with automated GitHub Actions workflow
 
 ## 📊 Data Sources & Attribution
