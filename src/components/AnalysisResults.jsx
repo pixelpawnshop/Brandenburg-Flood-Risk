@@ -268,7 +268,7 @@ function AnalysisResults({ results }) {
                 </div>
               ) : (
                 <>
-                  <h3>Land Use by Category</h3>
+                  <h3>Biotopes by Category</h3>
                   <div className="category-list">
                     {Object.entries(results.landCover.byCategory)
                       .sort((a, b) => b[1].count - a[1].count)
