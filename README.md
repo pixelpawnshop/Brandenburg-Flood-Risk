@@ -6,9 +6,9 @@ A web application for analyzing building exposure to flood risk scenarios in Bra
 
 - **Interactive Map**: Draw polygons to select analysis areas anywhere in Brandenburg
 - **Official Flood Data**: Integrates WMS layers from Brandenburg LfU showing three flood scenarios:
-  - HQ-extrem (extreme flood scenario)
-  - HQ-hoch (high flood scenario)
-  - HQ-mittel (medium flood scenario)
+  - HQ-200
+  - HQ-10
+  - HQ-10/20
 - **Building Analysis**: Automatically fetches all buildings within selected areas from OpenStreetMap
 - **Risk Assessment**: Determines which buildings are affected by each flood scenario
 - **Land Cover Analysis**: Integrates Brandenburg BTLN (Biotop- und Landnutzungskartierung) data to assess flood impact on different land use types (forests, grassland, wetlands, etc.)
@@ -37,7 +37,7 @@ https://github.com/user-attachments/assets/6e390251-dad4-4ee9-abbd-20a8f0156b89
 1. User draws a polygon defining the area of interest.
 2. All buildings within the polygon are retrieved via the OpenStreetMap Overpass API.
 3. Building centroids are calculated for spatial queries.
-4. For each building, flood exposure is determined by querying official LfU WMS layers (HQ-extrem, HQ-hoch, HQ-mittel).
+4. For each building, flood exposure is determined by querying official LfU WMS layers (HQ-200, HQ-100, HQ-10/20).
 5. Results are aggregated by building type, land use (BTLN), and census population data.
 6. Summary statistics and affected features are visualized and exported as CSV.
 

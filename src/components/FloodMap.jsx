@@ -311,7 +311,7 @@ function FloodMap({ onAnalysisStart, onAnalysisComplete, onAnalysisError, onProg
               onChange={() => toggleFloodLayer('extreme')}
             />
             <span className="layer-indicator extreme"></span>
-            HQ-extrem
+            HQ-200
           </label>
           <label>
             <input
@@ -321,7 +321,7 @@ function FloodMap({ onAnalysisStart, onAnalysisComplete, onAnalysisError, onProg
               onChange={() => toggleFloodLayer('medium')}
             />
             <span className="layer-indicator medium"></span>
-            HQ-hoch
+            HQ-100
           </label>
           <label>
             <input
@@ -331,7 +331,7 @@ function FloodMap({ onAnalysisStart, onAnalysisComplete, onAnalysisError, onProg
               onChange={() => toggleFloodLayer('high')}
             />
             <span className="layer-indicator high"></span>
-            HQ-mittel
+            HQ-10/20
           </label>
         </div>
         
