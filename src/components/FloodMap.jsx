@@ -41,6 +41,13 @@ function FloodMap({ onAnalysisStart, onAnalysisComplete, onAnalysisError, onProg
         maxZoom: 19
       }).addTo(map)
       
+      // Add scale control to bottom right
+      L.control.scale({
+        position: 'bottomright',
+        imperial: false,
+        metric: true
+      }).addTo(map)
+      
       // Add WMS flood layers
       const extremeLayer = L.tileLayer.wms(WMS_BASE_URL, {
         layers: FLOOD_LAYERS.extreme,
