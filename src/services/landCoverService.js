@@ -178,9 +178,10 @@ export async function fetchLandCoverData(polygonLatLngs) {
  * @param {Object} landCoverData - Land cover data from fetchLandCoverData
  * @param {Array<Array<number>>} polygonLatLngs - Polygon coordinates
  * @param {Object} mapBounds - Leaflet map bounds
+ * @param {Object} activeFloodLayers - Currently active flood layers
  * @returns {Promise<Object>} Land cover statistics
  */
-export async function calculateLandCoverStatistics(landCoverData, polygonLatLngs, mapBounds) {
+export async function calculateLandCoverStatistics(landCoverData, polygonLatLngs, mapBounds, activeFloodLayers) {
   if (!landCoverData || landCoverData.totalCount === 0) {
     return {
       totalFeatures: 0,
@@ -191,17 +192,18 @@ export async function calculateLandCoverStatistics(landCoverData, polygonLatLngs
     };
   }
 
-  // Load flood layer images for detection
-  let floodImages = null;
+  // Load only the currently selected flood layer
+  let floodImage = null;
   try {
-    const [extremeImage, highImage, mediumImage] = await Promise.all([
-      loadFloodLayerImage(FLOOD_LAYERS.extreme, mapBounds),
-      loadFloodLayerImage(FLOOD_LAYERS.high, mapBounds),
-      loadFloodLayerImage(FLOOD_LAYERS.medium, mapBounds)
-    ]);
-    floodImages = { extremeImage, highImage, mediumImage };
+    if (activeFloodLayers.extreme) {
+      floodImage = await loadFloodLayerImage(FLOOD_LAYERS.extreme, mapBounds);
+    } else if (activeFloodLayers.high) {
+      floodImage = await loadFloodLayerImage(FLOOD_LAYERS.high, mapBounds);
+    } else if (activeFloodLayers.medium) {
+      floodImage = await loadFloodLayerImage(FLOOD_LAYERS.medium, mapBounds);
+    }
   } catch (error) {
-    console.warn('Could not load flood layers for land cover analysis:', error);
+    console.warn('Could not load flood layer for land cover analysis:', error);
   }
 
   // Group by category and type
@@ -240,17 +242,14 @@ export async function calculateLandCoverStatistics(landCoverData, polygonLatLngs
     
     // Check flood affection using centroid
     let isAffected = false;
-    if (floodImages && feature.geometry) {
+    if (floodImage && feature.geometry) {
       try {
         // Get centroid of the biotope polygon
         const centroid = turf.centroid(feature.geometry);
         const [lng, lat] = centroid.geometry.coordinates;
         
-        // Check if centroid is flooded in any layer
-        isAffected = 
-          isPointFlooded(lat, lng, floodImages.extremeImage) ||
-          isPointFlooded(lat, lng, floodImages.highImage) ||
-          isPointFlooded(lat, lng, floodImages.mediumImage);
+        // Check if centroid is flooded in the selected layer
+        isAffected = isPointFlooded(lat, lng, floodImage);
       } catch (error) {
         // Skip flood check if error
       }

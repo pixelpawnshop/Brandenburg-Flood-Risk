@@ -88,6 +88,12 @@ function AnalysisResults({ results }) {
         >
           Land Cover
         </button>
+        <button 
+          className={activeTab === 'transportation' ? 'active' : ''}
+          onClick={() => setActiveTab('transportation')}
+        >
+          Transportation
+        </button>
       </div>
       
       {activeTab === 'overview' && (
@@ -322,6 +328,93 @@ function AnalysisResults({ results }) {
           ) : (
             <div className="empty-state">
               <p>No land cover data available for this area</p>
+            </div>
+          )}
+        </div>
+      )}
+      
+      {activeTab === 'transportation' && (
+        <div className="tab-content">
+          {results.transportation ? (
+            <>
+              <h3>Transportation Network Impact</h3>
+              
+              <div className="landcover-summary">
+                <div className="stat-card landcover">
+                  <div className="stat-value">{results.transportation.totalLength.toFixed(2)} km</div>
+                  <div className="stat-label">Total Road Length</div>
+                </div>
+                
+                <div className="stat-card landcover-affected">
+                  <div className="stat-value">{results.transportation.affectedLength.toFixed(2)} km</div>
+                  <div className="stat-label">Affected by Flooding</div>
+                </div>
+              </div>
+              
+              <h4>Roads by Type</h4>
+              <div className="category-list">
+                {Object.entries(results.transportation.byType)
+                  .sort((a, b) => b[1].totalLength - a[1].totalLength)
+                  .map(([type, data]) => {
+                    const affectedPercentage = data.totalLength > 0 
+                      ? (data.affectedLength / data.totalLength * 100).toFixed(1)
+                      : 0
+                    return (
+                      <div key={type} className="category-item">
+                        <div className="category-header">
+                          <span className="category-name">{type}</span>
+                          <span className="category-count">
+                            {data.totalLength.toFixed(2)} km
+                          </span>
+                        </div>
+                        <div className="category-stats">
+                          <div className="stat-row">
+                            <span>Any segment flooded:</span>
+                            <span>{data.affectedCount} of {data.count} roads</span>
+                          </div>
+                          <div className="stat-row">
+                            <span>Total length affected:</span>
+                            <span>{data.affectedLength.toFixed(2)} km ({affectedPercentage}%)</span>
+                          </div>
+                        </div>
+                        <div className="category-bar">
+                          <div 
+                            className="category-bar-fill" 
+                            style={{ width: `${affectedPercentage}%` }}
+                          ></div>
+                        </div>
+                      </div>
+                    )
+                  })}
+              </div>
+              
+              {results.transportation.criticalInfrastructure.length > 0 && (
+                <>
+                  <h4>Critical Infrastructure at Risk</h4>
+                  <div className="type-list">
+                    {results.transportation.criticalInfrastructure
+                      .sort((a, b) => parseFloat(b.affectedPercentage) - parseFloat(a.affectedPercentage))
+                      .map((item, index) => (
+                        <div key={index} className="type-item">
+                          <div className="type-row">
+                            <span className="type-name">
+                              {item.infrastructure}: {item.name}
+                              {item.ref && ` (${item.ref})`}
+                            </span>
+                            <span className="type-stats">
+                              {item.affectedPercentage}% affected ({item.length} km)
+                            </span>
+                          </div>
+                        </div>
+                      ))}
+                  </div>
+                  <p className="type-note">Showing bridges and tunnels with &gt;50% affected</p>
+                </>
+              )}
+            </>
+          ) : (
+            <div className="empty-state">
+              <p>No transportation data available for this area</p>
             </div>
           )}
         </div>

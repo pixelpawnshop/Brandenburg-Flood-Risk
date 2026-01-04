@@ -105,28 +105,39 @@ function isPointFlooded(lat, lon, imageData) {
  * Uses WMS GetMap + canvas pixel analysis for fast processing
  * @param {Array<Object>} buildings - Array of building objects
  * @param {Object} mapBounds - Current map bounds
+ * @param {Object} activeFloodLayers - Currently active flood layers
  * @param {Function} onProgress - Callback for progress updates
  * @returns {Promise<Array<Object>>} Buildings with flood risk assessments
  */
-export async function analyzeBuildingsFloodRisk(buildings, mapBounds, onProgress) {
+export async function analyzeBuildingsFloodRisk(buildings, mapBounds, activeFloodLayers, onProgress) {
   const results = [];
   const total = buildings.length;
   
+  console.log('analyzeBuildingsFloodRisk received activeFloodLayers:', activeFloodLayers);
+  
   try {
-    // Step 1: Load flood layer images
+    // Step 1: Load only the selected flood layer
     if (onProgress) {
       onProgress({
         current: 0,
         total: total,
-        message: 'Loading flood risk maps...'
+        message: 'Loading flood risk map...'
       });
     }
     
-    const [extremeImage, highImage, mediumImage] = await Promise.all([
-      loadFloodLayerImage(FLOOD_LAYERS.extreme, mapBounds),
-      loadFloodLayerImage(FLOOD_LAYERS.high, mapBounds),
-      loadFloodLayerImage(FLOOD_LAYERS.medium, mapBounds)
-    ]);
+    let floodImage = null;
+    let selectedLayer = 'none';
+    
+    if (activeFloodLayers.extreme) {
+      floodImage = await loadFloodLayerImage(FLOOD_LAYERS.extreme, mapBounds);
+      selectedLayer = 'extreme';
+    } else if (activeFloodLayers.high) {
+      floodImage = await loadFloodLayerImage(FLOOD_LAYERS.high, mapBounds);
+      selectedLayer = 'high';
+    } else if (activeFloodLayers.medium) {
+      floodImage = await loadFloodLayerImage(FLOOD_LAYERS.medium, mapBounds);
+      selectedLayer = 'medium';
+    }
     
     if (onProgress) {
       onProgress({
@@ -136,27 +147,20 @@ export async function analyzeBuildingsFloodRisk(buildings, mapBounds, onProgress
       });
     }
     
-    // Step 2: Check each building against flood images
+    // Step 2: Check each building against the selected flood layer
     buildings.forEach((building, index) => {
       const { lat, lon } = building.centroid;
       
-      // Check flood status in each layer
-      const isExtreme = isPointFlooded(lat, lon, extremeImage);
-      const isHigh = isPointFlooded(lat, lon, highImage);
-      const isMedium = isPointFlooded(lat, lon, mediumImage);
-      
-      let highestRisk = 'none';
-      if (isMedium) highestRisk = 'medium';
-      if (isHigh) highestRisk = 'high';
-      if (isExtreme) highestRisk = 'extreme';
+      // Check flood status only in the selected layer
+      const isFlooded = floodImage ? isPointFlooded(lat, lon, floodImage) : false;
       
       results.push({
         ...building,
         floodRisk: {
-          extreme: isExtreme,
-          high: isHigh,
-          medium: isMedium,
-          highest: highestRisk
+          extreme: selectedLayer === 'extreme' && isFlooded,
+          high: selectedLayer === 'high' && isFlooded,
+          medium: selectedLayer === 'medium' && isFlooded,
+          highest: isFlooded ? selectedLayer : 'none'
         }
       });
       

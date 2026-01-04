@@ -8,6 +8,7 @@ import { fetchBuildingsInPolygon, processBuildings, categorizeBuildingType } fro
 import { analyzeBuildingsFloodRisk, generateFloodStatistics, WMS_BASE_URL, FLOOD_LAYERS } from '../services/floodAnalysisService'
 import { calculateCensusPopulation, calculateFloodAffectedPopulation, calculatePopulationDensity } from '../services/censusPopulationService'
 import { fetchLandCoverData, calculateLandCoverStatistics } from '../services/landCoverService'
+import { fetchTransportationInPolygon, processTransportation, analyzeTransportationFloodRisk, generateTransportationStatistics } from '../services/transportationService'
 import './FloodMap.css'
 
 // Fix for default marker icons in Leaflet with Webpack/Vite
@@ -152,9 +153,11 @@ function FloodMap({ onAnalysisStart, onAnalysisComplete, onAnalysisError, onProg
           
           // Analyze flood risk
           const mapBounds = map.getBounds()
+          console.log('Active flood layers at analysis time:', activeFloodLayers)
           const analyzedBuildings = await analyzeBuildingsFloodRisk(
             buildings,
             mapBounds,
+            activeFloodLayers,
             onProgress
           )
           
@@ -188,10 +191,30 @@ function FloodMap({ onAnalysisStart, onAnalysisComplete, onAnalysisError, onProg
           try {
             const landCoverData = await fetchLandCoverData(latlngs)
             const mapBounds = map.getBounds()
-            landCoverStats = await calculateLandCoverStatistics(landCoverData, latlngs, mapBounds)
+            landCoverStats = await calculateLandCoverStatistics(landCoverData, latlngs, mapBounds, activeFloodLayers)
           } catch (error) {
             console.warn('Could not load land cover data:', error)
             // Continue without land cover data
+          }
+          
+          // Analyze transportation network
+          onProgress({
+            current: analyzedBuildings.length,
+            total: analyzedBuildings.length,
+            message: 'Analyzing transportation network...'
+          })
+          
+          let transportationStats = null
+          
+          try {
+            const transportationData = await fetchTransportationInPolygon(latlngs)
+            const roads = processTransportation(transportationData)
+            const mapBounds = map.getBounds()
+            const analyzedRoads = await analyzeTransportationFloodRisk(roads, mapBounds, activeFloodLayers, onProgress)
+            transportationStats = generateTransportationStatistics(analyzedRoads)
+          } catch (error) {
+            console.warn('Could not load transportation data:', error)
+            // Continue without transportation data
           }
           
           // Generate statistics
@@ -210,6 +233,7 @@ function FloodMap({ onAnalysisStart, onAnalysisComplete, onAnalysisError, onProg
             statistics: stats,
             population: populationStats,
             landCover: landCoverStats,
+            transportation: transportationStats,
             area: areaInKm2,
             populationDensity: populationDensity,
             polygon: latlngs
